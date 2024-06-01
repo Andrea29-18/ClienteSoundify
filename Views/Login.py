@@ -1,9 +1,7 @@
 import flet as ft
 import requests
-# Imports
-from Register import register_page 
-from MainMenu import main_menu 
-from Models.UserSingleton import UserSingleton
+from Register import register_page  # Importar la función de registro
+from MainMenu import main_menu  # Importar la función del menú principal
 
 def login_page(page: ft.Page):
     page.title = "Login con Flet y API"
@@ -34,14 +32,10 @@ def login_page(page: ft.Page):
             
             # Manejar la respuesta
             if response.status_code == 200:
-                 # Guardar el objeto de usuario en el Singleton
-                user_data = response.json()
-                user_singleton = UserSingleton()
-                user_singleton.set_user(user_data)
-                # Navegar al menú principal
+                mensaje_login.value = "Login exitoso"
+                mensaje_login.color = "green"
                 page.clean()
                 main_menu(page, login_page)  # Navegar al menú principal
-
             else:
                 mensaje_login.value = "Nombre de usuario o contraseña incorrectos"
                 mensaje_login.color = "red"

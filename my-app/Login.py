@@ -1,5 +1,6 @@
 import flet as ft
 import requests
+import jwt
 from Register import register_page  # Importar la función de registro
 from MainMenu import main_menu  # Importar la función del menú principal
 
@@ -28,16 +29,36 @@ def login_page(page: ft.Page):
         
         try:
             # Realizar la solicitud a la API
-            response = requests.post('http://localhost:3000/api/v2/audiencia/login', json=data)
+            response = requests.post('http://192.168.56.108:3000/api/v2/audiencia/login', json=data)
             
             # Manejar la respuesta
             if response.status_code == 200:
-                mensaje_login.value = "Login exitoso"
-                mensaje_login.color = "green"
-                page.clean()
-                main_menu(page, login_page)  # Navegar al menú principal
+                response_data = response.json()
+                print(response_data)  # Imprimir los datos de la respuesta para depuración
+                token = response_data.get('token')
+                
+                if token:
+                    # Decodificar el token JWT para obtener el objeto de usuario
+                    decoded_token = jwt.decode(token, options={"verify_signature": False})
+                    user_object = {
+                        'NombreUsuario': decoded_token.get('NombreUsuario'),
+                        'Correo': decoded_token.get('Correo')
+                    }
+                    mensaje_login.value = "Login exitoso"
+                    mensaje_login.color = "green"
+                    page.clean()
+                    main_menu(page, login_page, user_object)  # Navegar al menú principal pasando el objeto de usuario
+                else:
+                    mensaje_login.value = "Error: No se pudo obtener el token."
+                    mensaje_login.color = "red"
+            elif response.status_code == 404:
+                mensaje_login.value = "Usuario no encontrado"
+                mensaje_login.color = "red"
+            elif response.status_code == 401:
+                mensaje_login.value = "Contraseña incorrecta"
+                mensaje_login.color = "red"
             else:
-                mensaje_login.value = "Nombre de usuario o contraseña incorrectos"
+                mensaje_login.value = f"Error: {response.status_code} {response.json().get('message')}"
                 mensaje_login.color = "red"
             
         except requests.exceptions.RequestException as err:

@@ -45,7 +45,7 @@ def create_artist_page(page: ft.Page, profile_setting_page, user_object):
         
         mensaje_creacion.update()
 
-    boton_volver = ft.ElevatedButton(text="Volver", on_click=lambda e: page.clean() or profile_setting_page(page))
+    boton_volver = ft.ElevatedButton(text="Volver", on_click=lambda e: page.clean() or profile_setting_page(page, profile_setting_page, user_object))
 
     page.add(
         ft.Column(

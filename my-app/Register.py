@@ -26,7 +26,7 @@ def register_page(page: ft.Page, return_to_login):
 
         try:
             # Realizar la solicitud a la API
-            response = requests.post('http://localhost:3000/api/v2/audiencia', json=data)
+            response = requests.post('http://192.168.56.108:3000/api/v2/audiencia', json=data)
             
             # Manejar la respuesta
             if response.status_code == 201:

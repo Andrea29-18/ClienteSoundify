@@ -1,5 +1,6 @@
 import flet as ft
 import requests
+from CreateArtist import create_artist_page  # Importa la función de la nueva vista
 
 def profile_setting_page(page: ft.Page, login_page, user_object):
     page.title = "Configuración de Perfil"
@@ -46,7 +47,7 @@ def profile_setting_page(page: ft.Page, login_page, user_object):
         
         mensaje_actualizacion.update()
 
-    boton_subir_nivel = ft.ElevatedButton(text="Subir Nivel", on_click=lambda e: None)
+    boton_subir_nivel = ft.ElevatedButton(text="Subir de Nivel", on_click=lambda e: page.clean() or create_artist_page(page, profile_setting_page, user_object))
     boton_actualizar = ft.ElevatedButton(text="Actualizar", on_click=update_profile)
     boton_volver = ft.ElevatedButton(text="Volver", on_click=lambda e: page.clean() or login_page(page))
 

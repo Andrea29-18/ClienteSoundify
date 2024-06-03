@@ -1,70 +1,68 @@
 import flet as ft
 import requests
 
-def profile_setting_page(page: ft.Page, return_to_main_menu):
-    page.title = "Actualizar Perfil"
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+def profile_setting_page(page: ft.Page, login_page, user_object):
+    page.title = "Configuración de Perfil"
+    page.vertical_alignment = ft.MainAxisAlignment.START
+    page.horizontal_alignment = ft.CrossAxisAlignment.START
 
-    # Componentes de la UI de actualización de perfil
-    correo = ft.TextField(label="Correo")
-    username = ft.TextField(label="Nombre de usuario")
-    password = ft.TextField(label="Contraseña", password=True, can_reveal_password=True)
-    numero_telefonico = ft.TextField(label="Número telefónico")
+    nombre_usuario = ft.TextField(label="Nombre de usuario", value=user_object.get('NombreUsuario'))
+    correo_usuario = ft.TextField(label="Correo", value=user_object.get('Correo'))
+    numero_telefonico = ft.TextField(label="Número Telefónico", value=user_object.get('NumeroTelefonico'))
     mensaje_actualizacion = ft.Text()
 
-    # Función de manejo de la actualización del perfil
-    def update_user_data():
-        # Datos para actualizar el usuario
-        data = {
-            "Correo": correo.value,
-            "Password": password.value,
-            "NumeroTelefonico": numero_telefonico.value
+    def update_profile(e):
+        new_data = {
+            "Correo": correo_usuario.value,
+            "NumeroTelefonico": numero_telefonico.value,
         }
 
         try:
-            # Obtener el nombre de usuario del objeto de usuario
-            user_singleton = ft.Singleton.get_instance("user_singleton")
-            user = user_singleton.get_user()
-            if user:
-                username = user.get("NombreUsuario")
-                # Realizar la solicitud PUT a la API
-                response = requests.put(f'http://localhost:3000/api/v2/audiencia/{username}', json=data)
-                
-                # Manejar la respuesta
-                if response.status_code == 200:
-                    mensaje_actualizacion.value = "Datos de usuario actualizados correctamente"
-                    mensaje_actualizacion.color = "green"
-                else:
-                    mensaje_actualizacion.value = "Error al actualizar los datos de usuario"
-                    mensaje_actualizacion.color = "red"
+            token = user_object.get('token')
+            headers = {
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json"
+            }
+
+            response = requests.put(
+                f"http://192.168.56.108:3000/api/v2/audiencia/update/{user_object.get('NombreUsuario')}",
+                json=new_data,
+                headers=headers
+            )
+
+            if response.status_code == 200:
+                response_data = response.json()
+                updated_user = response_data.get('data')
+                mensaje_actualizacion.value = "Perfil actualizado correctamente"
+                mensaje_actualizacion.color = "green"
+                user_object.update(updated_user)
             else:
-                mensaje_actualizacion.value = "No se pudo obtener el objeto de usuario"
+                mensaje_actualizacion.value = f"Error: {response.status_code} {response.json().get('message')}"
                 mensaje_actualizacion.color = "red"
             
         except requests.exceptions.RequestException as err:
             mensaje_actualizacion.value = f"Error al conectar con la API: {err}"
             mensaje_actualizacion.color = "red"
+        
+        mensaje_actualizacion.update()
 
-    # Botón para actualizar perfil
-    boton_actualizar = ft.ElevatedButton(text="Actualizar", on_click=update_user_data)
-    
-    # Botón para volver al menú principal
-    boton_volver = ft.TextButton(text="Volver al menú principal", on_click=return_to_main_menu)
+    boton_subir_nivel = ft.ElevatedButton(text="Subir Nivel", on_click=lambda e: None)
+    boton_actualizar = ft.ElevatedButton(text="Actualizar", on_click=update_profile)
+    boton_volver = ft.ElevatedButton(text="Volver", on_click=lambda e: page.clean() or login_page(page))
 
-    # Agregar componentes a la página de actualización de perfil
     page.add(
         ft.Column(
             [
-                correo,
-                username,
-                password,
+                nombre_usuario,
+                correo_usuario,
                 numero_telefonico,
                 boton_actualizar,
+                boton_subir_nivel,
                 mensaje_actualizacion,
                 boton_volver
             ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER
+            alignment=ft.MainAxisAlignment.START,
+            horizontal_alignment=ft.CrossAxisAlignment.START,
+            spacing=20
         )
     )

@@ -24,7 +24,7 @@ def create_artist_page(page: ft.Page, profile_setting_page, user_object):
             }
 
             response = requests.post(
-                " http://192.168.56.108:3000/api/v2/artista",
+                " http://localhost:3000/api/v2/artista",
                 json=new_data,
                 headers=headers
             )

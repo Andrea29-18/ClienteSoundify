@@ -1,8 +1,8 @@
 import flet as ft
 import requests
 import jwt
-from MainMenu import main_menu
 from Register import register_page
+from MainMenu import main_menu
 
 def login_page(page: ft.Page):
     page.title = "Login con Flet y API"
@@ -34,8 +34,7 @@ def login_page(page: ft.Page):
                     decoded_token = jwt.decode(token, options={"verify_signature": False})
                     user_object = {
                         'NombreUsuario': decoded_token.get('NombreUsuario'),
-                        'Correo': decoded_token.get('Correo'),
-                        'token': token
+                        'Correo': decoded_token.get('Correo')
                     }
                     mensaje_login.value = "Login exitoso"
                     mensaje_login.color = "green"

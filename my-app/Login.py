@@ -3,6 +3,11 @@ import requests
 import jwt
 from Register import register_page
 from MainMenu import main_menu
+# Configuración de la API
+from dotenv import load_dotenv
+import os
+load_dotenv()
+API_URL = os.getenv('API_URL')
 
 def login_page(page: ft.Page):
     page.title = "Login con Flet y API"
@@ -22,14 +27,14 @@ def login_page(page: ft.Page):
             'NombreUsuario': username.value,
             'Password': password.value
         }
-        
+
         try:
-            response = requests.post('http://192.168.56.108:3000/api/v2/audiencia/login', json=data)
-            
+            response = requests.post(f'{API_URL}/api/v2/audiencia/login', json=data)
+
             if response.status_code == 200:
                 response_data = response.json()
                 token = response_data.get('token')
-                
+
                 if token:
                     decoded_token = jwt.decode(token, options={"verify_signature": False})
                     user_object = {
@@ -52,11 +57,11 @@ def login_page(page: ft.Page):
             else:
                 mensaje_login.value = f"Error: {response.status_code} {response.json().get('message')}"
                 mensaje_login.color = "red"
-            
+
         except requests.exceptions.RequestException as err:
             mensaje_login.value = f"Error al conectar con la API: {err}"
             mensaje_login.color = "red"
-        
+
         mensaje_login.update()
 
     boton_login = ft.ElevatedButton(text="Iniciar sesión", on_click=login)

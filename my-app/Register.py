@@ -1,5 +1,10 @@
 import flet as ft
 import requests
+# Configuración de la API
+from dotenv import load_dotenv
+import os
+load_dotenv()
+API_URL = os.getenv('API_URL')
 
 def register_page(page: ft.Page, return_to_login):
     page.title = "Registro de Usuario"
@@ -26,7 +31,7 @@ def register_page(page: ft.Page, return_to_login):
 
         try:
             # Realizar la solicitud a la API
-            response = requests.post('http://192.168.56.108:3000/api/v2/audiencia', json=data)
+            response = requests.post(f'{API_URL}/api/v2/audiencia', json=data)
             
             # Manejar la respuesta
             if response.status_code == 201:

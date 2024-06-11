@@ -1,87 +1,46 @@
 import flet as ft
 import requests
-import jwt
-from Register import register_page
-from MainMenu import main_menu
-# Configuración de la API
-from dotenv import load_dotenv
-import os
-load_dotenv()
-API_URL = os.getenv('API_URL')
 
-def login_page(page: ft.Page):
-    page.title = "Login con Flet y API"
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+API_BASE_URL = "http://192.168.3.37:3000/api/v2/audiencia"
+token = None
+
+def login_view(page):
+    username = ft.TextField(label="Nombre de Usuario", width=300)
+    password = ft.TextField(label="Contraseña", width=300, password=True)
+    
+    def login(e):
+        response = requests.post(f"{API_BASE_URL}/login", json={"NombreUsuario": username.value, "Password": password.value})
+        if response.status_code == 200:
+            global token
+            token = response.json()['token']
+            page.snack_bar = ft.SnackBar(ft.Text("Inicio de sesión exitoso"), open=True)
+            page.go("/menu")
+        else:
+            page.snack_bar = ft.SnackBar(ft.Text("Error en el inicio de sesión"), open=True)
 
     def go_to_register(e):
-        page.clean()
-        register_page(page, login_page)
-
-    username = ft.TextField(label="Nombre de usuario")
-    password = ft.TextField(label="Contraseña", password=True, can_reveal_password=True)
-    mensaje_login = ft.Text()
-
-    def login(e):
-        data = {
-            'NombreUsuario': username.value,
-            'Password': password.value
-        }
-
-        try:
-            response = requests.post(f'{API_URL}/api/v2/audiencia/login', json=data)
-
-            if response.status_code == 200:
-                response_data = response.json()
-                token = response_data.get('token')
-
-                if token:
-                    decoded_token = jwt.decode(token, options={"verify_signature": False})
-                    user_object = {
-                        'NombreUsuario': decoded_token.get('NombreUsuario'),
-                        'Correo': decoded_token.get('Correo')
-                    }
-                    mensaje_login.value = "Login exitoso"
-                    mensaje_login.color = "green"
-                    page.clean()
-                    main_menu(page, login_page, user_object)
-                else:
-                    mensaje_login.value = "Error: No se pudo obtener el token."
-                    mensaje_login.color = "red"
-            elif response.status_code == 404:
-                mensaje_login.value = "Usuario no encontrado"
-                mensaje_login.color = "red"
-            elif response.status_code == 401:
-                mensaje_login.value = "Contraseña incorrecta"
-                mensaje_login.color = "red"
-            else:
-                mensaje_login.value = f"Error: {response.status_code} {response.json().get('message')}"
-                mensaje_login.color = "red"
-
-        except requests.exceptions.RequestException as err:
-            mensaje_login.value = f"Error al conectar con la API: {err}"
-            mensaje_login.color = "red"
-
-        mensaje_login.update()
-
-    boton_login = ft.ElevatedButton(text="Iniciar sesión", on_click=login)
-    boton_registrar = ft.TextButton(text="Registrarse", on_click=go_to_register)
-
-    page.add(
-        ft.Column(
+        page.go("/register")
+    
+    page.views.clear()
+    page.views.append(
+        ft.View(
+            "/",
             [
-                username,
-                password,
-                boton_login,
-                mensaje_login,
-                boton_registrar
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                ft.Column(
+                    [
+                        ft.Text("Iniciar Sesión", size=30),
+                        username,
+                        password,
+                        ft.ElevatedButton("Entrar", on_click=login),
+                        ft.ElevatedButton("Registrar", on_click=go_to_register)
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                )
+            ]
         )
     )
+    page.update()
 
-def main(page: ft.Page):
-    login_page(page)
-
-ft.app(target=main)
+if __name__ == "__main__":
+    ft.app(target=login_view)

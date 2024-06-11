@@ -1,5 +1,10 @@
 import flet as ft
 import requests
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+API_URL = os.getenv('API_URL')
 
 def cargar_cancion_page(page: ft.Page):
     page.title = "Cargar Canción"

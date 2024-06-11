@@ -1,73 +1,50 @@
 import flet as ft
 import requests
-# Configuración de la API
-from dotenv import load_dotenv
-import os
-load_dotenv()
-API_URL = os.getenv('API_URL')
 
-def register_page(page: ft.Page, return_to_login):
-    page.title = "Registro de Usuario"
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
-    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+API_BASE_URL = "http://192.168.3.37:3000/api/v2/audiencia"
 
-    # Componentes de la UI de registro
-    correo = ft.TextField(label="Correo")
-    username = ft.TextField(label="Nombre de usuario")
-    password = ft.TextField(label="Contraseña", password=True, can_reveal_password=True)
-    numero_telefonico = ft.TextField(label="Número telefónico")
-    mensaje_registro = ft.Text()
+def register_view(page):
+    email = ft.TextField(label="Correo", width=300)
+    username = ft.TextField(label="Nombre de Usuario", width=300)
+    password = ft.TextField(label="Contraseña", width=300, password=True)
+    phone = ft.TextField(label="Número Telefónico", width=300)
+    
+    def register(e):
+        response = requests.post(API_BASE_URL, json={
+            "Correo": email.value,
+            "NombreUsuario": username.value,
+            "Password": password.value,
+            "NumeroTelefonico": phone.value,
+            "Canciones": []
+        })
+        if response.status_code == 201:
+            page.snack_bar = ft.SnackBar(ft.Text("Usuario registrado exitosamente"), open=True)
+            page.go("/")
+        else:
+            page.snack_bar = ft.SnackBar(ft.Text("Error en el registro"), open=True)
 
-    # Función de manejo del registro
-    def registrar(e):
-        # Datos del registro
-        data = {
-            'Correo': correo.value,
-            'NombreUsuario': username.value,
-            'Password': password.value,
-            'NumeroTelefonico': numero_telefonico.value,
-            'Canciones': []
-        }
-
-        try:
-            # Realizar la solicitud a la API
-            response = requests.post(f'{API_URL}/api/v2/audiencia', json=data)
-            
-            # Manejar la respuesta
-            if response.status_code == 201:
-                mensaje_registro.value = "Registro exitoso"
-                mensaje_registro.color = "green"
-            else:
-                mensaje_registro.value = "Error en el registro"
-                mensaje_registro.color = "red"
-            
-        except requests.exceptions.RequestException as err:
-            mensaje_registro.value = f"Error al conectar con la API: {err}"
-            mensaje_registro.color = "red"
-        
-        mensaje_registro.update()
-
-    # Función para volver al login
-    def volver_al_login(e):
-        page.clean()  # Limpiar la página
-        return_to_login(page)  # Volver a la pantalla de login
-
-    boton_registrar = ft.ElevatedButton(text="Registrar", on_click=registrar)
-    boton_volver = ft.TextButton(text="Volver al login", on_click=volver_al_login)
-
-    # Agregar componentes a la página de registro
-    page.add(
-        ft.Column(
+    page.views.clear()
+    page.views.append(
+        ft.View(
+            "/register",
             [
-                correo,
-                username,
-                password,
-                numero_telefonico,
-                boton_registrar,
-                mensaje_registro,
-                boton_volver
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                ft.Column(
+                    [
+                        ft.Text("Registrar Usuario", size=30),
+                        email,
+                        username,
+                        password,
+                        phone,
+                        ft.ElevatedButton("Registrar", on_click=register),
+                        ft.ElevatedButton("Regresar", on_click=lambda _: page.go("/"))
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                )
+            ]
         )
     )
+    page.update()
+
+if __name__ == "__main__":
+    ft.app(target=register_view)

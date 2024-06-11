@@ -1,6 +1,12 @@
 import flet as ft
 import requests
 
+# Configuración de la API
+from dotenv import load_dotenv
+import os
+load_dotenv()
+API_URL = os.getenv('API_URL')
+
 def create_artist_page(page: ft.Page, profile_setting_page, user_object):
     page.title = "Crear Artista"
     page.vertical_alignment = ft.MainAxisAlignment.START
@@ -24,7 +30,7 @@ def create_artist_page(page: ft.Page, profile_setting_page, user_object):
             }
 
             response = requests.post(
-                " http://localhost:3000/api/v2/artista",
+                f'{API_URL}/artista',
                 json=new_data,
                 headers=headers
             )

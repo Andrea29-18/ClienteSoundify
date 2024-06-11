@@ -1,8 +1,13 @@
 import flet as ft
+from global_state import global_state
+
 
 def favorites_view(page):
     def go_to_menu(e):
-        page.go("/menu_audiencia")
+        if global_state.user_type == "Audiencia":
+            page.go("/menu_audiencia")
+        elif global_state.user_type == "Artista":
+            page.go("/menu_artista")
     
     page.views.clear()
     page.views.append(

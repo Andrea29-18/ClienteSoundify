@@ -1,8 +1,8 @@
 import flet as ft
 import requests
+from global_state import global_state
 
 API_BASE_URL = "http://192.168.3.37:3000/api/v2/audiencia"
-token = None
 
 def login_view(page):
     username = ft.TextField(label="Nombre de Usuario", width=300)
@@ -11,12 +11,13 @@ def login_view(page):
     def login(e):
         response = requests.post(f"{API_BASE_URL}/login", json={"NombreUsuario": username.value, "Password": password.value})
         if response.status_code == 200:
-            global token
-            token = response.json()['token']
+            data = response.json()
+            global_state.token = data['token']
+            global_state.user_data = data['data']['user']
             page.snack_bar = ft.SnackBar(ft.Text("Inicio de sesión exitoso"), open=True)
             page.go("/menu")
         else:
-            page.snack_bar = ft.SnackBar(ft.Text("Error en el inicio de sesión"), open=True)
+            page.snack_bar = ft.SnackBar(ft.Text(response.json().get('message', 'Error en el inicio de sesión')), open=True)
 
     def go_to_register(e):
         page.go("/register")

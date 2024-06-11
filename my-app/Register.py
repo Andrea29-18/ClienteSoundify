@@ -10,19 +10,16 @@ def register_view(page):
     phone = ft.TextField(label="Número Telefónico", width=300)
     
     def register(e):
-        response = requests.post(API_BASE_URL, json={
-            "Correo": email.value,
-            "NombreUsuario": username.value,
-            "Password": password.value,
-            "NumeroTelefonico": phone.value,
-            "Canciones": []
-        })
+        response = requests.post(f"{API_BASE_URL}/", json={"Correo": email.value, "NombreUsuario": username.value, "Password": password.value, "NumeroTelefonico": phone.value})
         if response.status_code == 201:
-            page.snack_bar = ft.SnackBar(ft.Text("Usuario registrado exitosamente"), open=True)
+            page.snack_bar = ft.SnackBar(ft.Text("Registro exitoso"), open=True)
             page.go("/")
         else:
-            page.snack_bar = ft.SnackBar(ft.Text("Error en el registro"), open=True)
-
+            page.snack_bar = ft.SnackBar(ft.Text(response.json().get('message', 'Error en el registro')), open=True)
+    
+    def go_to_login(e):
+        page.go("/")
+    
     page.views.clear()
     page.views.append(
         ft.View(
@@ -30,13 +27,13 @@ def register_view(page):
             [
                 ft.Column(
                     [
-                        ft.Text("Registrar Usuario", size=30),
+                        ft.Text("Registrar", size=30),
                         email,
                         username,
                         password,
                         phone,
                         ft.ElevatedButton("Registrar", on_click=register),
-                        ft.ElevatedButton("Regresar", on_click=lambda _: page.go("/"))
+                        ft.ElevatedButton("Regresar", on_click=go_to_login)
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER

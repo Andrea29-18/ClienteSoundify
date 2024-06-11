@@ -7,9 +7,8 @@ def menu_artista_view(page):
     def go_to_settings(e):
         page.go("/settings")
 
-    def create_album(e):
-        # Implementar la lógica para crear un álbum
-        page.snack_bar = ft.SnackBar(ft.Text("Funcionalidad para crear un álbum aún no implementada"), open=True)
+    def go_to_create_album(e):
+        page.go("/create_album")
     
     def upload_song(e):
         # Implementar la lógica para cargar una canción
@@ -26,7 +25,7 @@ def menu_artista_view(page):
                 ft.Column(
                     [
                         ft.Text("Menú de Artista", size=30),
-                        ft.ElevatedButton("Crear Álbum", on_click=create_album),
+                        ft.ElevatedButton("Crear Álbum", on_click=go_to_create_album),
                         ft.ElevatedButton("Cargar Canción", on_click=upload_song),
                         ft.ElevatedButton("Favoritos", on_click=go_to_favorites),
                         ft.ElevatedButton("Configuración", on_click=go_to_settings),

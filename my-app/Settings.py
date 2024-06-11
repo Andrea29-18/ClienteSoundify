@@ -37,7 +37,7 @@ def settings_view(page):
                         email,
                         phone,
                         ft.ElevatedButton("Actualizar", on_click=update_user),
-                        ft.ElevatedButton("Regresar a Menú", on_click=lambda _: page.go("/menu"))
+                        ft.ElevatedButton("Regresar a Menú", on_click=lambda _: page.go("/menu_audiencia"))
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER

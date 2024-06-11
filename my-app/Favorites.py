@@ -2,7 +2,7 @@ import flet as ft
 
 def favorites_view(page):
     def go_to_menu(e):
-        page.go("/menu")
+        page.go("/menu_audiencia")
     
     page.views.clear()
     page.views.append(

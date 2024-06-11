@@ -14,8 +14,12 @@ def login_view(page):
             data = response.json()
             global_state.token = data['token']
             global_state.user_data = data['data']['user']
+            global_state.user_type = data['data']['userType']
             page.snack_bar = ft.SnackBar(ft.Text("Inicio de sesión exitoso"), open=True)
-            page.go("/menu")
+            if global_state.user_type == "Audiencia":
+                page.go("/menu_audiencia")
+            elif global_state.user_type == "Artista":
+                page.go("/menu_artista")
         else:
             page.snack_bar = ft.SnackBar(ft.Text(response.json().get('message', 'Error en el inicio de sesión')), open=True)
 

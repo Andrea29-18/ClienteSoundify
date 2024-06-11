@@ -1,6 +1,6 @@
 import flet as ft
 
-def menu_view(page):
+def menu_audiencia_view(page):
     def go_to_favorites(e):
         page.go("/favorites")
     
@@ -13,14 +13,14 @@ def menu_view(page):
     page.views.clear()
     page.views.append(
         ft.View(
-            "/menu",
+            "/menu_audiencia",
             [
                 ft.Column(
                     [
-                        ft.Text("Menú", size=30),
+                        ft.Text("Menú de Audiencia", size=30),
                         ft.ElevatedButton("Favoritos", on_click=go_to_favorites),
                         ft.ElevatedButton("Configuración", on_click=go_to_settings),
-                        ft.ElevatedButton("Cerrar Perfil", on_click=logout)
+                        ft.ElevatedButton("Cerrar Sesión", on_click=logout)
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER
@@ -31,4 +31,4 @@ def menu_view(page):
     page.update()
 
 if __name__ == "__main__":
-    ft.app(target=menu_view)
+    ft.app(target=menu_audiencia_view)

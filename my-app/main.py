@@ -1,7 +1,8 @@
 import flet as ft
 from Login import login_view
 from Register import register_view
-from Menu import menu_view
+from MenuAudiencia import menu_audiencia_view
+from MenuArtista import menu_artista_view
 from Favorites import favorites_view
 from Settings import settings_view
 
@@ -12,8 +13,10 @@ def main(page: ft.Page):
             login_view(page)
         elif page.route == "/register":
             register_view(page)
-        elif page.route == "/menu":
-            menu_view(page)
+        elif page.route == "/menu_audiencia":
+            menu_audiencia_view(page)
+        elif page.route == "/menu_artista":
+            menu_artista_view(page)
         elif page.route == "/favorites":
             favorites_view(page)
         elif page.route == "/settings":

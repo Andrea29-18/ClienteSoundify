@@ -1,7 +1,9 @@
 import flet as ft
 import requests
+from decouple import config
+api_url = config('API_URL')
 
-API_BASE_URL = "http://192.168.1.72:3000/api/v2/audiencia"
+API_BASE_URL = api_url +"/audiencia"
 
 def register_view(page):
     email = ft.TextField(label="Correo", width=300)

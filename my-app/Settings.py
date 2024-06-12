@@ -1,8 +1,11 @@
 import flet as ft
 import requests
 from global_state import global_state
+from decouple import config
 
-API_BASE_URL = "http://192.168.1.72:3000/api/v2/audiencia"
+api_url = config('API_URL')
+
+API_BASE_URL = api_url +"/audiencia"
 
 def settings_view(page):
     user_data = global_state.user_data
@@ -27,6 +30,18 @@ def settings_view(page):
             page.snack_bar = ft.SnackBar(ft.Text("Usuario actualizado exitosamente"), open=True)
         else:
             page.snack_bar = ft.SnackBar(ft.Text(response.json().get('message', 'Error al actualizar el usuario')), open=True)
+   
+    def delete_user(e):
+        response = requests.delete(
+            f"{API_BASE_URL}/{user_data['NombreUsuario']}",
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        print(response.json())
+        if response.status_code == 200:
+            page.snack_bar = ft.SnackBar(ft.Text("Usuario eliminado exitosamente"), open=True)
+            page.go("/")  
+        else:
+            page.snack_bar = ft.SnackBar(ft.Text(response.json().get('message', 'Error al eliminar el usuario')), open=True)
 
     page.views.clear()
     page.views.append(
@@ -41,6 +56,7 @@ def settings_view(page):
                         phone,
                         ft.ElevatedButton("Actualizar", on_click=update_user),
                         ft.ElevatedButton("Ser Artista", on_click=go_to_beArtist),
+                        ft.ElevatedButton("Eliminar Cuenta", on_click=delete_user, style=ft.ButtonStyle(bgcolor=ft.colors.RED)),
                         ft.ElevatedButton("Regresar a Menú", on_click=lambda _: page.go("/menu_audiencia"))
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,

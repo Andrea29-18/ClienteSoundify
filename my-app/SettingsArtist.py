@@ -1,8 +1,11 @@
 import flet as ft
 import requests
 from global_state import global_state
+from decouple import config
 
-API_BASE_URL = "http://192.168.1.72:3000/api/v2/artista"
+api_url = config('API_URL')
+
+API_BASE_URL = api_url +"/artista"
 
 def settings_artista_view(page):
     user_data = global_state.user_data

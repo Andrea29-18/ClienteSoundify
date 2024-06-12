@@ -36,7 +36,6 @@ def settings_view(page):
             f"{API_BASE_URL}/{user_data['NombreUsuario']}",
             headers={"Authorization": f"Bearer {token}"}
         )
-        print(response.json())
         if response.status_code == 200:
             page.snack_bar = ft.SnackBar(ft.Text("Usuario eliminado exitosamente"), open=True)
             page.go("/")  

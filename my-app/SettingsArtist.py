@@ -26,6 +26,17 @@ def settings_artista_view(page):
         else:
             page.snack_bar = ft.SnackBar(ft.Text(response.json().get('message', 'Error al actualizar el artista')), open=True)
 
+    def delete_artist(e):
+        response = requests.delete(
+            f"{API_BASE_URL}/{user_data['NombreArtista']}"
+        )
+        if response.status_code == 200:
+            page.snack_bar = ft.SnackBar(ft.Text("Artista eliminado exitosamente"), open=True)
+            page.go("/")  
+        else:
+            page.snack_bar = ft.SnackBar(ft.Text(response.json().get('message', 'Error al eliminar el usuario')), open=True)
+
+
     page.views.clear()
     page.views.append(
         ft.View(
@@ -38,6 +49,7 @@ def settings_artista_view(page):
                         email,
                         phone,
                         ft.ElevatedButton("Actualizar", on_click=update_user),
+                        ft.ElevatedButton("Eliminar Cuenta", on_click=delete_artist, style=ft.ButtonStyle(bgcolor=ft.colors.RED)),
                         ft.ElevatedButton("Regresar a Menú", on_click=lambda _: page.go("/menu_artista"))
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,

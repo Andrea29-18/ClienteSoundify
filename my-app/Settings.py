@@ -11,6 +11,9 @@ def settings_view(page):
     username = ft.TextField(label="Nombre de Usuario", width=300, value=user_data['NombreUsuario'], disabled=True)
     email = ft.TextField(label="Correo", width=300, value=user_data['Correo'])
     phone = ft.TextField(label="Número Telefónico", width=300, value=user_data['NumeroTelefonico'])
+
+    def go_to_beArtist(e):
+        page.go("/be_artist")
     
     def update_user(e):
         response = requests.put(
@@ -37,6 +40,7 @@ def settings_view(page):
                         email,
                         phone,
                         ft.ElevatedButton("Actualizar", on_click=update_user),
+                        ft.ElevatedButton("Ser Artista", on_click=go_to_beArtist),
                         ft.ElevatedButton("Regresar a Menú", on_click=lambda _: page.go("/menu_audiencia"))
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,

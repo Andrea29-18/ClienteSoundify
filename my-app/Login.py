@@ -2,7 +2,7 @@ import flet as ft
 import requests
 from global_state import global_state
 
-API_BASE_URL = "http://192.168.3.37:3000/api/v2/audiencia"
+API_BASE_URL = "http://192.168.1.72:3000/api/v2/audiencia"
 
 def login_view(page):
     username = ft.TextField(label="Nombre de Usuario", width=300)

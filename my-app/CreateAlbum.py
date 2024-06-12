@@ -2,7 +2,7 @@ import flet as ft
 import requests
 from global_state import global_state
 
-API_BASE_URL = "http://192.168.3.37:3000/api/v2"
+API_BASE_URL = "http://192.168.1.72:3000/api/v2"
 
 def create_album_view(page):
     # Obtener la lista de géneros musicales disponibles desde la API

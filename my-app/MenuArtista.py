@@ -5,7 +5,7 @@ def menu_artista_view(page):
         page.go("/favorites")
     
     def go_to_settings(e):
-        page.go("/settings")
+        page.go("/settings_artist")
 
     def go_to_create_album(e):
         page.go("/create_album")

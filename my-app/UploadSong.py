@@ -2,8 +2,11 @@ import flet as ft
 import requests
 import os
 from global_state import global_state
+from decouple import config
 
-API_BASE_URL = "http://192.168.0.105:3000/api/v2/cancion"
+api_url = config('API_URL')
+
+API_BASE_URL = api_url +"/cancion"
 
 def upload_song_view(page):
     token = global_state.token

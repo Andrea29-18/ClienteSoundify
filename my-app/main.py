@@ -8,6 +8,7 @@ from Settings import settings_view
 from CreateAlbum import create_album_view
 from BeArtist import be_artista_view
 from SettingsArtist import settings_artista_view
+from UploadSong import upload_song_view
 
 def main(page: ft.Page):
     def route_change(route):
@@ -30,6 +31,8 @@ def main(page: ft.Page):
             create_album_view(page)
         elif page.route == "/be_artist":
             be_artista_view(page)
+        elif page.route == "/upload_song":
+            upload_song_view(page)
         page.update()
 
     page.on_route_change = route_change

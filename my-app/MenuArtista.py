@@ -11,8 +11,7 @@ def menu_artista_view(page):
         page.go("/create_album")
     
     def upload_song(e):
-        # Implementar la lógica para cargar una canción
-        page.snack_bar = ft.SnackBar(ft.Text("Funcionalidad para cargar una canción aún no implementada"), open=True)
+        page.go("/upload_song")
     
     def logout(e):
         page.go("/")

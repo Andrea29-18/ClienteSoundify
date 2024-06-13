@@ -14,7 +14,7 @@ def upload_song_view(page):
     
     nombre_cancion = ft.TextField(label="Nombre de Canción", width=400)
     idioma = ft.TextField(label="Idioma", width=400)
-    artista = ft.TextField(label="Artista", width=400)
+    artista = ft.TextField(label="Artista", width=400, value=user_data['NombreArtista'])
     album = ft.TextField(label="Álbum", width=400)
     audio_path = ft.Text("Seleccionar Archivo de Audio", width=400)
     error_text = ft.Text("", color="red")
@@ -58,7 +58,6 @@ def upload_song_view(page):
                 'Album': album.value
             }
             files = {'audio': (os.path.basename(file_path), f, 'audio/mpeg')}
-            
             response = requests.post(
                 API_BASE_URL,
                 data=form_data,

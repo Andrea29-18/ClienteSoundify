@@ -35,4 +35,4 @@ service ImageService {
  
     // Función para subir imágenes PNG
     rpc uploadPNG(stream DataChunkResponse) returns (DownloadFileRequest);
- }
+}

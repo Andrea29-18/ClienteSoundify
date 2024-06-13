@@ -2,10 +2,11 @@ import flet as ft
 import requests
 from global_state import global_state
 from decouple import config
+import threading
+import time
 
 api_url = config('API_URL')
-
-API_BASE_URL = api_url +"/audiencia"
+API_BASE_URL = api_url + "/audiencia"
 
 def login_view(page):
     username = ft.TextField(label="Nombre de Usuario", width=300)
@@ -23,6 +24,7 @@ def login_view(page):
                 page.go("/menu_audiencia")
             elif global_state.user_type == "Artista":
                 page.go("/menu_artista")
+            start_token_renewal()
         else:
             page.snack_bar = ft.SnackBar(ft.Text(response.json().get('message', 'Error en el inicio de sesión')), open=True)
 
@@ -49,6 +51,23 @@ def login_view(page):
         )
     )
     page.update()
+
+def renew_token():
+    while True:
+        time.sleep(1500)  # 25 minutes
+        if global_state.token:
+            response = requests.get(f"{API_BASE_URL}/refresh-token", headers={"Authorization": global_state.token})
+            if response.status_code == 200:
+                data = response.json()
+                global_state.token = data['token']
+                print("Token renovado")
+            else:
+                print("Error al renovar el token")
+
+def start_token_renewal():
+    thread = threading.Thread(target=renew_token)
+    thread.daemon = True
+    thread.start()
 
 if __name__ == "__main__":
     ft.app(target=login_view)

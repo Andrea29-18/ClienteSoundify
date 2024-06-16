@@ -1,11 +1,9 @@
 import flet as ft
 import requests
 from global_state import global_state
-from decouple import config
 
-api_url = config('API_URL')
+API_BASE_URL = "http://192.168.0.105:3000/api/v2/audiencia"
 
-API_BASE_URL = api_url +"/audiencia"
 
 def settings_view(page):
     user_data = global_state.user_data

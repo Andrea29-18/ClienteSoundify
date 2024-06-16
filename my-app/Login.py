@@ -1,12 +1,10 @@
 import flet as ft
 import requests
 from global_state import global_state
-from decouple import config
 import threading
 import time
 
-api_url = config('API_URL')
-API_BASE_URL = api_url + "/audiencia"
+API_BASE_URL = "http://192.168.0.105:3000/api/v2/audiencia"
 
 def login_view(page):
     username = ft.TextField(label="Nombre de Usuario", width=300)

@@ -1,11 +1,8 @@
 import flet as ft
 import requests
 from global_state import global_state
-from decouple import config
 
-api_url = config('API_URL')
-
-API_BASE_URL = api_url +"/artista"
+API_BASE_URL = "http://192.168.0.105:3000/api/v2/artista"
 
 def be_artista_view(page):
     description_field = ft.TextField(label="Descripción General", multiline=True, max_length=250, width=400)

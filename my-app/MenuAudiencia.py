@@ -6,6 +6,9 @@ def menu_audiencia_view(page):
     
     def go_to_settings(e):
         page.go("/settings")
+
+    def go_to_listener_music(e):
+        page.go("/listening_music")
     
     def logout(e):
         page.go("/")
@@ -20,6 +23,7 @@ def menu_audiencia_view(page):
                         ft.Text("Menú de Audiencia", size=30),
                         ft.ElevatedButton("Favoritos", on_click=go_to_favorites),
                         ft.ElevatedButton("Configuración", on_click=go_to_settings),
+                        ft.ElevatedButton("Escuchar Música", on_click=go_to_listener_music),
                         ft.ElevatedButton("Cerrar Sesión", on_click=logout)
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,

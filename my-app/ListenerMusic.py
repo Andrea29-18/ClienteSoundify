@@ -14,19 +14,19 @@ def get_random_song():
     return random.choice(songs)
 
 def listening_music_view(page):
-    current_index = [0]  
+    current_index = [0]
 
     def load_song(index):
         audio1.src = os.path.join(assets_folder, songs[index])
-        audio1.play()
         audio1.update()
-
+        audio1.play()
+        
     def volume_down(_):
-        audio1.volume -= 0.1
+        audio1.volume = max(0, audio1.volume - 0.1)
         audio1.update()
 
     def volume_up(_):
-        audio1.volume += 0.1
+        audio1.volume = min(1, audio1.volume + 0.1)
         audio1.update()
 
     def play_next_song(_):

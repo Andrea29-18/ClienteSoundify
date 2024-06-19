@@ -1,4 +1,3 @@
-//Versión de Protobuf que estamos usando
 syntax = "proto3";
 
 //Para enviar mensajes de texto entre los nodos
@@ -21,18 +20,4 @@ service AudioService {
 
    // Esta es la función para subir archivos
    rpc uploadAudio (stream DataChunkResponse) returns (DownloadFileRequest);
-}
-
-// Servicio para manejar imágenes JPEG
-service ImageService {
-    // Función para descargar imágenes JPEG
-    rpc downloadJPEG(DownloadFileRequest) returns (stream DataChunkResponse);
-    // Función para subir imágenes JPEG
-    rpc uploadJPEG(stream DataChunkResponse) returns (DownloadFileRequest);
-
-    // Función para descargar imágenes PNG
-    rpc downloadPNG(DownloadFileRequest) returns (stream DataChunkResponse);
- 
-    // Función para subir imágenes PNG
-    rpc uploadPNG(stream DataChunkResponse) returns (DownloadFileRequest);
 }

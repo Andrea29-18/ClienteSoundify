@@ -2,7 +2,7 @@ import flet as ft
 import os
 import random
 
-assets_folder = "assets"
+assets_folder = "downloaded_audio"
 
 songs = [f for f in os.listdir(assets_folder) if f.endswith('.mp3')]
 

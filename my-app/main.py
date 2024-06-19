@@ -10,6 +10,7 @@ from BeArtist import be_artista_view
 from SettingsArtist import settings_artista_view
 from UploadSong import upload_song_view
 from ListenerMusic import listening_music_view
+from DowloadMusic import download_music_view
 
 def main(page: ft.Page):
     def route_change(route):
@@ -36,6 +37,8 @@ def main(page: ft.Page):
             upload_song_view(page)
         elif page.route == "/listening_music":
             listening_music_view(page)
+        elif page.route == "/download_music":
+            download_music_view(page)
         page.update()
 
     page.on_route_change = route_change

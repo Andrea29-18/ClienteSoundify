@@ -11,7 +11,7 @@ from SettingsArtist import settings_artista_view
 from UploadSong import upload_song_view
 from ListenerMusic import listening_music_view
 from DowloadMusic import download_music_view
-
+ 
 def main(page: ft.Page):
     def route_change(route):
         page.views.clear()
